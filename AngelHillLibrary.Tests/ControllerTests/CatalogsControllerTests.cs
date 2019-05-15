@@ -29,7 +29,14 @@ namespace AngelHillLibrary.Tests
         CatalogsController controller = new CatalogsController();
         ActionResult newView = controller.New();
         Assert.IsInstanceOfType(newView, typeof (ViewResult));
+      }
 
+      [TestMethod]
+      public void Show_ReturnsCorrectView_True()
+      {
+        CatalogsController controller = new CatalogsController();
+        ActionResult showView = controller.Show(1);
+        Assert.IsInstanceOfType(showView, typeof(ViewResult));
       }
 
     }

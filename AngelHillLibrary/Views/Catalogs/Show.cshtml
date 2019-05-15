@@ -1,0 +1,38 @@
+@using AngelHillLibrary.Models;
+@{ Layout = "_Layout"; }
+
+<h1>Angel Hill Library</h1>
+<h2>Book: @Model["catalog"].GetTitle()</h2>
+<hr />
+
+@if (@Model["catalogAuthors"].Count != 0)
+{
+  <h4>Here are all the authors in this book:</h4>
+  <ul>
+    @foreach (var author in @Model["catalogAuthors"])
+    {
+      <li>@author.GetAuthorName()</li>
+    }
+  </ul>
+}
+
+<h4>Add an author to this book:</h4>
+
+<form action='/catalogs/@Model["catalog"].GetId()/authors/new' method='post'>
+  <label for='authorId'>Select a author</label>
+  <select id='authorId' name='authorId' type='text'>
+
+    @foreach (var author in @Model["allAuthors"])
+    {
+      <option value='@author.GetId()'>@author.GetAuthorName()</option>
+    }
+
+  </select>
+  <button type='submit'>Add</button>
+</form>
+
+<form action="/catalogs/@Model["catalog"].GetId()/delete" method="post">
+  <button type="submit" name="button">Delete Book</button>
+</form>
+
+<p><a href="/">Return to Main Page</a></p>

@@ -168,6 +168,51 @@ namespace AngelHillLibrary.Models
 
     }
 
+    public List<Author> GetAuthors()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT author_id FROM catalogs_authors WHERE catalog_id = @CatalogId;";
+      MySqlParameter catalogIdParameter = new MySqlParameter();
+      catalogIdParameter.ParameterName = "@CatalogId";
+      catalogIdParameter.Value = _id;
+      cmd.Parameters.Add(catalogIdParameter);
+      var rdr = cmd.ExecuteReader() as MySqlDataReader;
+      List<int> authorIds = new List<int> {};
+      while(rdr.Read())
+      {
+        int authorId = rdr.GetInt32(0);
+        authorIds.Add(authorId);
+      }
+      rdr.Dispose();
+      List<Author> authors = new List<Author> {};
+      foreach (int authorId in authorIds)
+      {
+        var authorQuery = conn.CreateCommand() as MySqlCommand;
+        authorQuery.CommandText = @"SELECT * FROM authors WHERE id = @AuthorId;";
+        MySqlParameter authorIdParameter = new MySqlParameter();
+        authorIdParameter.ParameterName = "@AuthorId";
+        authorIdParameter.Value = authorId;
+        authorQuery.Parameters.Add(authorIdParameter);
+        var authorQueryRdr = authorQuery.ExecuteReader() as MySqlDataReader;
+        while(authorQueryRdr.Read())
+        {
+          int thisAuthorId = authorQueryRdr.GetInt32(0);
+          string authorName = authorQueryRdr.GetString(1);
+          Author foundAuthor = new Author(authorName, thisAuthorId);
+          authors.Add(foundAuthor);
+        }
+        authorQueryRdr.Dispose();
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return authors;
+    }
+
 
   }
 }
