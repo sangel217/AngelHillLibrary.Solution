@@ -213,6 +213,56 @@ namespace AngelHillLibrary.Models
       return authors;
     }
 
+    public void AddAuthor(Author newAuthor)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"INSERT INTO catalogs_authors (catalog_id, author_id) VALUES (@catalogId, @AuthorId);";
+      MySqlParameter catalog_id = new MySqlParameter();
+      catalog_id.ParameterName = "@catalogId";
+      catalog_id.Value = _id;
+      cmd.Parameters.Add(catalog_id);
+      MySqlParameter author_id = new MySqlParameter();
+      author_id.ParameterName = "@AuthorId";
+      author_id.Value = newAuthor.GetId();
+      cmd.Parameters.Add(author_id);
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+
+    public static List<Catalog> SearchTitle(string userInput)
+    {
+      List<Catalog> allTitles = new List<Catalog> {};
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM catalogs WHERE book_title LIKE '%"+userInput+"%' ORDER BY book_title ASC;";
+      MySqlParameter SearchTitle = new MySqlParameter("@SearchTitle", userInput);
+      cmd.Parameters.Add(SearchTitle);
+      MySqlDataReader rdr = cmd.ExecuteReader();
+      while(rdr.Read())
+      {
+        if(!rdr.IsDBNull(0))
+        {
+          int catalogId = rdr.GetInt32(0);
+          string bookTitle = rdr.GetString(1);
+          Catalog newCatalog = new Catalog(bookTitle, catalogId);
+          allTitles.Add(newCatalog);
+        }
+      }
+      conn.Close();
+      if(conn != null)
+      {
+        conn.Dispose();
+      }
+      return allTitles;
+    }
+
 
   }
 }

@@ -1,0 +1,15 @@
+@{ Layout = "_Layout"; }
+@using AngelHillLibrary.Models;
+
+<h1>Angel Hill Library</h1>
+<hr />
+
+<h2>Edit book title: @Model.GetTitle()</h2>
+
+<form action="/catalogs/@Model.GetId()" method="post">
+  <label for="newTitle">Title:</label>
+  <input type="text" name="newTitle" value="@Model.GetTitle()">
+  <button type="submit">Edit</button>
+</form>
+
+<h4><a href="/catalogs/@Model.GetId()">Return to previous page</a></h4>

@@ -11,8 +11,8 @@ namespace AngelHillLibrary.Controllers
     [HttpGet("/catalogs")]
     public ActionResult Index()
     {
-      List<Catalog> allCatalogs = Catalog.GetAll();
-      return View(allCatalogs);
+      List<Catalog> allTitles = Catalog.GetAll();
+      return View(allTitles);
     }
 
     [HttpGet("/catalogs/new")]
@@ -41,6 +41,52 @@ namespace AngelHillLibrary.Controllers
       model.Add("catalogAuthors", catalogAuthors);
       model.Add("allAuthors", allAuthors);
       return View(model);
+    }
+
+    [HttpPost("/catalogs/{catalogId}/authors/new")]
+    public ActionResult AddAuthor(int catalogId, int authorId)
+    {
+      Catalog catalog = Catalog.Find(catalogId);
+      Author author = Author.Find(authorId);
+      catalog.AddAuthor(author);
+      return RedirectToAction("Show",  new { id = catalogId });
+    }
+
+    [HttpPost("/catalogs/{catalogId}/delete")]
+    public ActionResult Delete(int catalogId)
+    {
+      Catalog catalog = Catalog.Find(catalogId);
+      catalog.Delete();
+      return RedirectToAction("Index");
+    }
+
+    [HttpGet("/catalogs/{catalogId}/edit")]
+    public ActionResult Edit(int catalogId)
+    {
+      Catalog catalog = Catalog.Find(catalogId);
+      return View(catalog);
+    }
+
+    [HttpPost("catalogs/{id}")]
+    public ActionResult Update(int id, string newTitle)
+    {
+      Catalog catalog = Catalog.Find(id);
+      catalog.Edit(newTitle);
+      return RedirectToAction("Index");
+    }
+
+    [HttpGet("/search_by_title")]
+    public ActionResult SearchByTitle()
+    {
+    	return View();
+    }
+
+
+    [HttpPost("/search_by_title")]
+    public ActionResult Index(string title)
+    {
+    	List<Catalog> searchTitle = Catalog.SearchTitle(title);
+    	return View(searchTitle);
     }
 
 

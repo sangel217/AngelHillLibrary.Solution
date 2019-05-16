@@ -39,5 +39,21 @@ namespace AngelHillLibrary.Tests
         Assert.IsInstanceOfType(showView, typeof(ViewResult));
       }
 
+      [TestMethod]
+      public void AddAuthor_ReturnsCorrectView_True()
+      {
+        CatalogsController controller = new CatalogsController();
+        ActionResult showView = controller.AddAuthor(1, 1);
+        Assert.IsInstanceOfType(showView, typeof(RedirectToActionResult));
+      }
+
+      [TestMethod]
+      public void Delete_ReturnsCorrectView_True()
+      {
+        CatalogsController controller = new CatalogsController();
+        ActionResult showView = controller.Delete(1);
+        Assert.IsInstanceOfType(showView, typeof(RedirectToActionResult));
+      }
+
     }
 }

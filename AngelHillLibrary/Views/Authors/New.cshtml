@@ -1,0 +1,22 @@
+@{ Layout = "_Layout"; }
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Angel Hill Library</title>
+  </head>
+  <body>
+    <h1>Add a new author</h1>
+
+<form action="/authors" method="post">
+  <label for="authorName">Author Name:</label>
+  <input id="authorName" name="authorName" type="text">
+  <button type="submit">Add new author</button>
+</form>
+
+<p><a href="/">Back home</a></p>
+<p><a href="/authors">View all authors</a></p>
+  </body>
+
+</html>

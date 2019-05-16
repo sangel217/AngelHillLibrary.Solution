@@ -1,0 +1,19 @@
+@{ Layout = "_Layout"; }
+@using AngelHillLibrary.Models;
+
+
+<form action="/search_by_title" method="post">
+  @* <label>
+          <input type="radio" name="searchBy" value="title">
+          Title
+  </label> <br>
+  <label>
+  <input type="radio" name="searchBy" value="author">
+  Author
+  </label> *@
+  @* <br> *@
+  <input type="text" name="title"> <button type="submit">Search</button>
+</form>
+<br>
+<p><a href="/catalogs">Back to catalogs.</a></p>
+<p><a href="/">Back home</a></p>
